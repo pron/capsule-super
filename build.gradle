@@ -50,8 +50,7 @@ dependencies {
 //    
 //    manifest {
 //        attributes(
-//	    'Main-Class'  : 'Capsule',
-//            'Caplets'     : 'SuperCapsule'
+//	    'Main-Class'  : 'SuperCapsule'
 //        )
 //    }
 //}
@@ -77,8 +76,7 @@ shadowJar {
             
     manifest {
         attributes(
-	    'Main-Class'  : 'Capsule',
-            'Caplets'   : 'SuperCapsule'
+	    'Main-Class'  : 'SuperCapsule'
         )
     }
 }
@@ -157,5 +155,5 @@ uploadArchives.repositories.mavenDeployer {
     }
 }
 
-//[assemble, build, install, signArchives, uploadArchives]*.dependsOn shadowJar
+[assemble, build, install, signArchives, uploadArchives]*.dependsOn shadowJar
 
