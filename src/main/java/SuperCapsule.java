@@ -28,9 +28,7 @@ public class SuperCapsule extends Capsule implements capsule.CapsuleAPI {
     }
 
     private SuperCapsuleImpl createImpl() {
-        if (isUnix() || isMac())
-            return new PosixSuperCapsule(this);
-        throw new UnsupportedOperationException("This caplet only runs on POSIX systems. This platform has been identified as " + getPlatform());
+        return new PosixSuperCapsule(this);
     }
 
     @Override

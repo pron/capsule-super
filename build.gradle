@@ -1,4 +1,9 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.1'
+    id 'maven'
+    id 'signing'
+}
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -36,12 +41,44 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.10'
 }
 
-jar {
-    from { configurations.runtime.collect { zipTree(it) } }
+//jar {
+//    // from configurations.runtime
+//    // exclude '*capsule*.jar'
+//    from { configurations.runtime.collect { zipTree(it) } }
+//    exclude 'Capsule.class'
+//    exclude 'META-INF/**'
+//    
+//    manifest {
+//        attributes(
+//	    'Main-Class'  : 'Capsule',
+//            'Caplets'     : 'SuperCapsule'
+//        )
+//    }
+//}
+
+shadowJar {
+    outputs.upToDateWhen { false }
+        
+    // artifactAttached = false
+    classifier = '' // overwrite jar
+    destinationDir = file("$buildDir/libs")
+
+    dependencies { exclude(dependency('co.paralleluniverse:capsule:.*')) }
+    
+    exclude 'META-INF/**'
+    // exclude 'licenses/**'
+    exclude 'about.html'
+    exclude '**/version.properties'
+
+    relocate 'org.', 'capsule.org.'
+    relocate 'jnr.', 'capsule.jnr.'
+    // relocate 'jni.', 'capsule.jni.'
+    // relocate 'com.', 'capsule.com.'
+            
     manifest {
         attributes(
-            'Main-Class'  : 'Capsule',
-            'Caplets'     : 'SecureCapsule'
+	    'Main-Class'  : 'Capsule',
+            'Caplets'   : 'SuperCapsule'
         )
     }
 }
@@ -57,9 +94,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 ///////// Publish Artifacts
-apply plugin: 'maven'
-apply plugin: 'signing'
-
 artifacts {
     archives jar
     archives sourcesJar
@@ -110,3 +144,18 @@ uploadArchives {
         }
     }
 }
+
+install.repositories.mavenInstaller {
+    pom.whenConfigured {
+        it.dependencies.clear()
+    }
+}
+
+uploadArchives.repositories.mavenDeployer {
+    pom.whenConfigured {
+        it.dependencies.clear()
+    }
+}
+
+//[assemble, build, install, signArchives, uploadArchives]*.dependsOn shadowJar
+
