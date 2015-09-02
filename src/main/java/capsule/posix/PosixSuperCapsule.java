@@ -36,15 +36,15 @@ public class PosixSuperCapsule extends SuperCapsuleImpl {
         return posix.execve(path(pb), argv(pb), envp(pb));
     }
 
-    private static String path(ProcessBuilder pb) {
+    protected static String path(ProcessBuilder pb) {
         return pb.command().get(0);
     }
 
-    private static String[] argv(ProcessBuilder pb) {
+    protected static String[] argv(ProcessBuilder pb) {
         return toArray(pb.command().subList(0, pb.command().size()));
     }
 
-    private static String[] envp(ProcessBuilder pb) {
+    protected static String[] envp(ProcessBuilder pb) {
         List<String> env = new ArrayList<>();
         for (Map.Entry<String, String> pair : pb.environment().entrySet())
             env.add(pair.getKey() + '=' + pair.getValue());

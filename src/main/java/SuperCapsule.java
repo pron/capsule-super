@@ -8,6 +8,8 @@
 
 import capsule.posix.PosixSuperCapsule;
 import capsule.SuperCapsuleImpl;
+import capsule.windows.WindowsFFISuperCapsule;
+
 import java.nio.file.Path;
 
 /**
@@ -28,6 +30,8 @@ public class SuperCapsule extends Capsule implements capsule.CapsuleAPI {
     }
 
     private SuperCapsuleImpl createImpl() {
+        if (isWindows())
+            return new WindowsFFISuperCapsule(this);
         return new PosixSuperCapsule(this);
     }
 
