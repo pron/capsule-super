@@ -71,8 +71,10 @@ shadowJar {
 
     relocate 'org.', 'capsule.org.'
     relocate 'jnr.', 'capsule.jnr.'
-    // relocate 'jni.', 'capsule.jni.'
-    // relocate 'com.', 'capsule.com.'
+    relocate 'jni.', 'capsule.jni.'
+    relocate('com.', 'capsule.com.') {
+        exclude 'com/kenai/jffi/**'
+    }
             
     manifest {
         attributes(
